@@ -34,6 +34,7 @@ function renderTabs() {
             "</button><button type=\"button\" class=\"btn btn-default options\" data-id='" +
             index + "'><span class=\"glyphicon glyphicon-cog\"></span></button></div>\n");
     });
+    $("[data-id='"+activeList+"']").addClass('active');
 }
 
 function renderList() {
