@@ -34,7 +34,7 @@ function renderTabs() {
             "</button><button type=\"button\" class=\"btn btn-default options\" data-id='" +
             index + "'><span class=\"glyphicon glyphicon-cog\"></span></button></div>\n");
     });
-    $("[data-id='"+activeList+"']").addClass('active');
+    $("[data-id='" + activeList + "']").addClass('active');
 }
 
 function renderList() {
@@ -66,8 +66,12 @@ $(document).ready(function() {
 
 
     $('#newList').click(function() {
+        var name = prompt('New list name.');
+        if (name === null || name.length === 0) {
+            return;
+        }
         db.push({
-            name: 'list ' + (db.length + 1)
+            name: name
         });
         renderTabs();
     });
@@ -95,7 +99,7 @@ $(document).ready(function() {
             renderTabs();
             renderList();
             $('#optionsModal').modal('hide');
-        //save
+            //save
         }
 
 
