@@ -44,7 +44,12 @@ function renderList() {
 
     db[activeList].list.forEach(function(listObj, index) {
         if (index === 0) {
-            $('#wordList').append('<h1 id="activeWord">' + listObj.word + '</h1>');
+            $('#wordList').append('<h1 id="activeWord"></h1>');
+
+            for (var d = 0; d < db[activeList].list[0].word.length; d = d + 1) {
+
+                $('#activeWord').append("<h7>" + db[activeList].list[0].word.substring(d, d + 1) + "</h7>");
+            }
         } else {
             $('#wordList').append('<h1>' + listObj.word + '</h1>').css('color', 'gray');
         }
@@ -59,10 +64,6 @@ $(document).ready(function() {
 
     renderTabs();
     renderList();
-
-
-
-
 
 
     $('#newList').click(function() {
@@ -111,30 +112,44 @@ $(document).ready(function() {
 
 var textValue = "";
 
-$(document).keypress(function(e) { /// need keypress for french characters . backspace needs fixing
-    // if (wordObject.length <= 0) {
-    //     return;
-    // }
-    // if (bodyPress === true) {
-    //     $('.wordlist-container').hide();
 
-    var c = String.fromCharCode(e.which);
-    textValue = textValue + c;
-    var fulltext = textValue;
-    var lowText = fulltext.toLowerCase();
+function noReset() {
 
-    $('#activeWord').empty();
-
-    for (var d = 0; d < db[activeList].list[0].word.length; d = d + 1) {
-
-        $('#activeWord').append("<h7>" + db[activeList].list[0].word.substring(d, d + 1) + "</h7>");
-    }
-
-    $('#activeWord h7:nth-child(' + (lowText.length + 1) + ')').css({
-        "border": "1px dotted black"
+    $(document).keydown(function(e) {
+        if (e.which === 8) {
+        	textValue = textValue.substring(0, textValue.length-1);
+            $('#activeWord h7:nth-child(n+' + (textValue.length+1) + ')').css({
+                color: '#000000'
+            });
+        }
     });
 
+    $(document).keypress(function(e) { /// need keypress for french characters . backspace needs fixing
+        // if (wordObject.length <= 0) {
+        //     return;
+        // }
 
-    console.log(lowText);
 
-});
+        var c = String.fromCharCode(e.which);
+        textValue = textValue + c;
+
+
+
+        if (textValue === db[activeList].list[0].word.substring(0, textValue.length)) {
+            $('#activeWord h7:nth-child(' + textValue.length + ')').css({
+                color: '#5bd642'
+            });
+        } else {
+
+            $('#activeWord h7:nth-child(' + textValue.length + ')').css({
+                color: '#e01432'
+            });
+        }
+
+
+        console.log(textValue);
+
+    });
+}
+
+noReset();
