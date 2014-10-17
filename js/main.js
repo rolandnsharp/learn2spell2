@@ -12,7 +12,14 @@ var db = [{
         definition: 'You can also add 333333333333333333333333th the inpbove.'
     }]
 }, {
-    name: 'english'
+    name: 'english',
+    list: [{
+        word: 'start',
+        definition: 'Using Learn2Spell is easy. If, while.'
+    }, {
+        word: 'typing',
+        definition: 'You can also add words manually with the inpbove.'
+    }]
 }, {
     name: 'french'
 }];
@@ -22,11 +29,15 @@ var activeList = 0;
 function renderTabs() {
     $('.tabs').empty();
     db.forEach(function(list, index) {
-        $('.tabs').append("<div class=\"btn-group\"><button type=\"button\" class=\"btn btn-default \" id='tab" + index + "'>" + list.name + "</button><button type=\"button\" class=\"btn btn-default \">x</button></div>\n");
+        $('.tabs').append("<div class=\"btn-group\"><button type=\"radio\" class=\"btn btn-default tab\" data-id='" +
+            index + "'>" + list.name +
+            "</button><button type=\"button\" class=\"btn btn-default options\" data-id='" +
+            index + "'><span class=\"glyphicon glyphicon-cog\"></span></button></div>\n");
     });
 }
 
 function renderList() {
+    $('#wordList').empty();
     // $('#activeWord').text(db[activeList].list[0].word);
     $('#define').text(db[activeList].list[0].definition);
 
@@ -60,6 +71,34 @@ $(document).ready(function() {
         renderTabs();
     });
 
+    $('body').on('click', ".tab", function(ev) {
+        var clicked = $(ev.currentTarget);
+        activeList = clicked.attr("data-id");
+        renderTabs();
+        renderList();
+    });
+
+    $('body').on('click', ".options", function(ev) {
+        var clicked = $(ev.currentTarget);
+        activeList = clicked.attr("data-id");
+        $('#rename-input').attr("placeholder", db[activeList].name);
+        $('#optionsModal').modal();
+        renderTabs();
+        renderList();
+    });
+
+    $('.delete-list').click(function() {
+        if (confirm("Are you sure you want to delete list '" + db[activeList].name + "' ") === true) {
+            db.splice(activeList, 1);
+            activeList = 0;
+            renderTabs();
+            renderList();
+            $('#optionsModal').modal('hide');
+        //save
+        }
+
+
+    });
 
 });
 
