@@ -181,15 +181,13 @@ var textValue = "";
 // }
 
 
-function getAllIndexes(str, val) {
-    var indexes = [], i;
-    for(i = 0; i < str.length; i++)
-    	// console.log(i, str);
-    	// console.log(str.slice(i, i+1));
-        if (str.slice(i, i+1) === val)
-            indexes.push(i);
-    return indexes;
-}
+// function getAllIndexes(str, val) {
+//     var indexes = [], i;
+//     for(i = 0; i < str.length; i++)
+//         if (str.slice(i, i+1) === val)
+//             indexes.push(i);
+//     return indexes;
+// }
 
 function hideCurrentWord() {
 
@@ -205,7 +203,9 @@ function hideCurrentWord() {
     $(document).keypress(function(e) {
         var c = String.fromCharCode(e.which);
 
-        console.log(getAllIndexes(db[activeList].list[0].word, ' '));
+        // console.log(getAllIndexes(db[activeList].list[0].word, ' '));
+
+
 
 
 
@@ -214,13 +214,18 @@ function hideCurrentWord() {
         }
 
         if (textValue.toLowerCase() === db[activeList].list[0].word.substring(0, textValue.length).toLowerCase()) {
+        	//success
             $('#activeWord h7:nth-child(' + textValue.length + ')').css({
                 color: '#5bd642'
             });
         } else {
+        	//fail
 
-            $('#activeWord h7:nth-child(' + textValue.length + ')').css({
-                color: '#e01432'
+        	var startOfWordIndex = textValue.lastIndexOf(' ', textValue.length) + 1;
+        	textValue = textValue.slice(0, startOfWordIndex);
+        	console.log(textValue);
+            $('#activeWord h7:nth-child(n+' + (startOfWordIndex) + ')').css({
+                color: '#000000'
             });
         }
 
