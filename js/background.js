@@ -25,6 +25,16 @@ var db = [{
     list: []
 }];
 
+chrome.storage.sync.get("chromeDB", function(localStorage) {
+    if (localStorage.chromeDB === undefined) {
+        chrome.storage.sync.set({
+            "chromeDB": db
+        });
+    } else {
+        db = localStorage.chromeDB;
+    }
+});
+
 function openTab(filename) {
     var myid = chrome.i18n.getMessage("@@extension_id");
     chrome.windows.getCurrent(
@@ -68,13 +78,14 @@ db.forEach(function(listItem, index) {
         title: "Add '%s' to " + listItem.name,
         contexts: ["selection"],
         onclick: function(info) {
-          var word = info.selectionText.toLowerCase();
+            var word = info.selectionText;
             db[index].list.unshift({
                 word: word
             });
-            //save
+            chrome.storage.sync.set({
+                "chromeDB": db
+            });
             console.log(word, db);
-
         }
     });
 });

@@ -26,6 +26,16 @@ var db = [{
 
 var activeList = 0;
 
+chrome.storage.sync.get("chromeDB", function(localStorage) {
+    if (localStorage.chromeDB === undefined) {
+        chrome.storage.sync.set({
+            "chromeDB": db
+        });
+    } else {
+        db = localStorage.chromeDB;
+    }
+});
+
 function renderTabs() {
     $('.tabs').empty();
     db.forEach(function(list, index) {
@@ -124,7 +134,64 @@ $(document).ready(function() {
 var textValue = "";
 
 
-function noReset() {
+// function noReset() {
+
+//     $(document).keydown(function(e) {
+//         if (e.which === 8) {
+//             textValue = textValue.substring(0, textValue.length - 1);
+//             $('#activeWord h7:nth-child(n+' + (textValue.length + 1) + ')').css({
+//                 color: '#000000'
+//             });
+//         }
+//     });
+
+//     $(document).keypress(function(e) {
+//         var c = String.fromCharCode(e.which);
+
+//         if (textValue.length < db[activeList].list[0].word.length) {
+//             textValue = textValue + c;
+//         }
+
+//         if (textValue.toLowerCase() === db[activeList].list[0].word.substring(0, textValue.length).toLowerCase()) {
+//             $('#activeWord h7:nth-child(' + textValue.length + ')').css({
+//                 color: '#5bd642'
+//             });
+//         } else {
+
+//             $('#activeWord h7:nth-child(' + textValue.length + ')').css({
+//                 color: '#e01432'
+//             });
+//         }
+
+//         if (textValue.toLowerCase() === db[activeList].list[0].word.toLowerCase()) {
+//             next();
+//         }
+//         console.log(textValue);
+//     });
+// }
+
+// noReset();
+
+// function whiteSpaceIndexes() {
+// 	db[activeList].list[0].word.split();
+//     for (var i = 0; i < db[activeList].list[0].word.length; i++) {
+//         if
+//         // textValue.indexOf(' ', i);
+//     };
+// }
+
+
+function getAllIndexes(str, val) {
+    var indexes = [], i;
+    for(i = 0; i < str.length; i++)
+    	// console.log(i, str);
+    	// console.log(str.slice(i, i+1));
+        if (str.slice(i, i+1) === val)
+            indexes.push(i);
+    return indexes;
+}
+
+function hideCurrentWord() {
 
     $(document).keydown(function(e) {
         if (e.which === 8) {
@@ -138,11 +205,15 @@ function noReset() {
     $(document).keypress(function(e) {
         var c = String.fromCharCode(e.which);
 
+        console.log(getAllIndexes(db[activeList].list[0].word, ' '));
+
+
+
         if (textValue.length < db[activeList].list[0].word.length) {
             textValue = textValue + c;
         }
 
-        if (textValue === db[activeList].list[0].word.substring(0, textValue.length)) {
+        if (textValue.toLowerCase() === db[activeList].list[0].word.substring(0, textValue.length).toLowerCase()) {
             $('#activeWord h7:nth-child(' + textValue.length + ')').css({
                 color: '#5bd642'
             });
@@ -153,14 +224,21 @@ function noReset() {
             });
         }
 
-        if (textValue === db[activeList].list[0].word) {
+        if (textValue.toLowerCase() === db[activeList].list[0].word.toLowerCase()) {
             next();
         }
         console.log(textValue);
     });
 }
 
-noReset();
+hideCurrentWord();
+
+
+
+
+
+
+
 
 
 // todo : popup reminder
