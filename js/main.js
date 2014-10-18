@@ -56,6 +56,12 @@ function renderList() {
     });
 }
 
+function next() {
+    db[activeList].list.push(db[activeList].list.shift());
+    renderList();
+    textValue = "";
+}
+
 
 
 $(document).ready(function() {
@@ -72,7 +78,8 @@ $(document).ready(function() {
             return;
         }
         db.push({
-            name: name
+            name: name,
+            list: []
         });
         renderTabs();
     });
@@ -106,6 +113,10 @@ $(document).ready(function() {
 
     });
 
+    $('#next').click(function() {
+        next();
+    });
+
 });
 
 
@@ -117,23 +128,19 @@ function noReset() {
 
     $(document).keydown(function(e) {
         if (e.which === 8) {
-        	textValue = textValue.substring(0, textValue.length-1);
-            $('#activeWord h7:nth-child(n+' + (textValue.length+1) + ')').css({
+            textValue = textValue.substring(0, textValue.length - 1);
+            $('#activeWord h7:nth-child(n+' + (textValue.length + 1) + ')').css({
                 color: '#000000'
             });
         }
     });
 
-    $(document).keypress(function(e) { /// need keypress for french characters . backspace needs fixing
-        // if (wordObject.length <= 0) {
-        //     return;
-        // }
-
-
+    $(document).keypress(function(e) {
         var c = String.fromCharCode(e.which);
-        textValue = textValue + c;
 
-
+        if (textValue.length < db[activeList].list[0].word.length) {
+            textValue = textValue + c;
+        }
 
         if (textValue === db[activeList].list[0].word.substring(0, textValue.length)) {
             $('#activeWord h7:nth-child(' + textValue.length + ')').css({
@@ -146,10 +153,14 @@ function noReset() {
             });
         }
 
-
+        if (textValue === db[activeList].list[0].word) {
+            next();
+        }
         console.log(textValue);
-
     });
 }
 
 noReset();
+
+
+// todo : popup reminder

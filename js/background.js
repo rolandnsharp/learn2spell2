@@ -1,3 +1,30 @@
+var db = [{
+    name: 'list 1',
+    options: '',
+    list: [{
+        word: 'start',
+        definition: 'Using Learn2Spell is easy. If, while.'
+    }, {
+        word: 'typing',
+        definition: 'You can also add words manually with the inpbove.'
+    }, {
+        word: 'typing33',
+        definition: 'You can also add 333333333333333333333333th the inpbove.'
+    }]
+}, {
+    name: 'english',
+    list: [{
+        word: 'start',
+        definition: 'Using Learn2Spell is easy. If, while.'
+    }, {
+        word: 'typing',
+        definition: 'You can also add words manually with the inpbove.'
+    }]
+}, {
+    name: 'french',
+    list: []
+}];
+
 function openTab(filename) {
     var myid = chrome.i18n.getMessage("@@extension_id");
     chrome.windows.getCurrent(
@@ -34,4 +61,20 @@ chrome.browserAction.onClicked.addListener(function(activeTab) {
     } else {
         openTab("index.html");
     }
+});
+
+db.forEach(function(listItem, index) {
+    chrome.contextMenus.create({
+        title: "Add '%s' to " + listItem.name,
+        contexts: ["selection"],
+        onclick: function(info) {
+          var word = info.selectionText.toLowerCase();
+            db[index].list.unshift({
+                word: word
+            });
+            //save
+            console.log(word, db);
+
+        }
+    });
 });
