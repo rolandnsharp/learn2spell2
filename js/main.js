@@ -56,7 +56,7 @@ function renderList() {
 
     db[activeList].list.forEach(function(listObj, index) {
         if (index === 0) {
-            $('#wordList').append('<h1 id="activeWord"></h1>');
+            $('#activeWord').empty();
 
             for (var d = 0; d < db[activeList].list[0].word.length; d = d + 1) {
 
@@ -123,16 +123,21 @@ $(document).ready(function() {
             //save
         }
 
-
     });
 
     $('#next').click(function() {
         next();
     });
 
+    $('#delete').click(function() {
+    	db[activeList].list.shift();
+    	chrome.storage.sync.set({
+            "chromeDB": db
+        });
+        renderList();
+    });
+
 });
-
-
 
 
 var textValue = "";
