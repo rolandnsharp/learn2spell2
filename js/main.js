@@ -33,6 +33,8 @@ chrome.storage.sync.get("chromeDB", function(localStorage) {
         });
     } else {
         db = localStorage.chromeDB;
+        renderTabs();
+        renderList();
     }
 });
 
@@ -131,65 +133,10 @@ $(document).ready(function() {
 
 
 
+
 var textValue = "";
 
-
-// function noReset() {
-
-//     $(document).keydown(function(e) {
-//         if (e.which === 8) {
-//             textValue = textValue.substring(0, textValue.length - 1);
-//             $('#activeWord h7:nth-child(n+' + (textValue.length + 1) + ')').css({
-//                 color: '#000000'
-//             });
-//         }
-//     });
-
-//     $(document).keypress(function(e) {
-//         var c = String.fromCharCode(e.which);
-
-//         if (textValue.length < db[activeList].list[0].word.length) {
-//             textValue = textValue + c;
-//         }
-
-//         if (textValue.toLowerCase() === db[activeList].list[0].word.substring(0, textValue.length).toLowerCase()) {
-//             $('#activeWord h7:nth-child(' + textValue.length + ')').css({
-//                 color: '#5bd642'
-//             });
-//         } else {
-
-//             $('#activeWord h7:nth-child(' + textValue.length + ')').css({
-//                 color: '#e01432'
-//             });
-//         }
-
-//         if (textValue.toLowerCase() === db[activeList].list[0].word.toLowerCase()) {
-//             next();
-//         }
-//         console.log(textValue);
-//     });
-// }
-
-// noReset();
-
-// function whiteSpaceIndexes() {
-// 	db[activeList].list[0].word.split();
-//     for (var i = 0; i < db[activeList].list[0].word.length; i++) {
-//         if
-//         // textValue.indexOf(' ', i);
-//     };
-// }
-
-
-// function getAllIndexes(str, val) {
-//     var indexes = [], i;
-//     for(i = 0; i < str.length; i++)
-//         if (str.slice(i, i+1) === val)
-//             indexes.push(i);
-//     return indexes;
-// }
-
-function hideCurrentWord() {
+function noReset() {
 
     $(document).keydown(function(e) {
         if (e.which === 8) {
@@ -203,40 +150,80 @@ function hideCurrentWord() {
     $(document).keypress(function(e) {
         var c = String.fromCharCode(e.which);
 
-        // console.log(getAllIndexes(db[activeList].list[0].word, ' '));
-
-
-
-
-
         if (textValue.length < db[activeList].list[0].word.length) {
             textValue = textValue + c;
         }
 
         if (textValue.toLowerCase() === db[activeList].list[0].word.substring(0, textValue.length).toLowerCase()) {
-        	//success
             $('#activeWord h7:nth-child(' + textValue.length + ')').css({
                 color: '#5bd642'
             });
         } else {
-        	//fail
 
-        	var startOfWordIndex = textValue.lastIndexOf(' ', textValue.length) + 1;
-        	textValue = textValue.slice(0, startOfWordIndex);
-        	console.log(textValue);
-            $('#activeWord h7:nth-child(n+' + (startOfWordIndex) + ')').css({
-                color: '#000000'
+            $('#activeWord h7:nth-child(' + textValue.length + ')').css({
+                color: '#e01432'
             });
         }
 
         if (textValue.toLowerCase() === db[activeList].list[0].word.toLowerCase()) {
             next();
         }
-        console.log(textValue);
+        console.log(textValue, db[activeList].list[0].word.substring(0, textValue.length + 1).toLowerCase());
     });
 }
 
-hideCurrentWord();
+noReset();
+
+
+
+
+
+// function hideCurrentWord() {
+
+//     $(document).keydown(function(e) {
+//         if (e.which === 8) {
+//             textValue = textValue.substring(0, textValue.length - 1);
+//             $('#activeWord h7:nth-child(n+' + (textValue.length + 1) + ')').css({
+//                 color: '#000000'
+//             });
+//         }
+//     });
+
+//     $(document).keypress(function(e) {
+//         var c = String.fromCharCode(e.which);
+
+//         // console.log(getAllIndexes(db[activeList].list[0].word, ' '));
+
+
+
+//         if (textValue.length < db[activeList].list[0].word.length) {
+//             textValue = textValue + c;
+//         }
+
+//         if (textValue.toLowerCase() === db[activeList].list[0].word.substring(0, textValue.length).toLowerCase()) {
+//         	//success
+//             $('#activeWord h7:nth-child(' + textValue.length + ')').css({
+//                 color: '#5bd642'
+//             });
+//         } else {
+//         	//fail
+
+//         	var startOfWordIndex = textValue.lastIndexOf(' ', textValue.length) + 1;
+//         	textValue = textValue.slice(0, startOfWordIndex);
+
+//             $('#activeWord h7:nth-child(n+' + (startOfWordIndex) + ')').css({
+//                 color: '#000000'
+//             });
+//         }
+
+//         if (textValue.toLowerCase() === db[activeList].list[0].word.toLowerCase()) {
+//             next();
+//         }
+//         console.log(textValue, db[activeList].list[0].word.substring(0, textValue.length).toLowerCase());
+//     });
+// }
+
+// hideCurrentWord();
 
 
 
