@@ -99,6 +99,7 @@ $(document).ready(function() {
     $('body').on('click', ".tab", function(ev) {
         var clicked = $(ev.currentTarget);
         activeList = clicked.attr("data-id");
+        textValue = "";
         renderTabs();
         renderList();
     });
