@@ -26,17 +26,20 @@ var db = [{
 
 var activeList = 0;
 
-chrome.storage.sync.get("chromeDB", function(localStorage) {
-    if (localStorage.chromeDB === undefined) {
-        chrome.storage.sync.set({
-            "chromeDB": db
-        });
-    } else {
-        db = localStorage.chromeDB;
-        renderTabs();
-        renderList();
-    }
-});
+function load() {
+    chrome.storage.sync.get("chromeDB", function(localStorage) {
+        if (localStorage.chromeDB === undefined) {
+            chrome.storage.sync.set({
+                "chromeDB": db
+            });
+        } else {
+            db = localStorage.chromeDB;
+            renderTabs();
+            renderList();
+        }
+    });
+}
+load();
 
 function renderTabs() {
     $('.tabs').empty();
@@ -49,7 +52,11 @@ function renderTabs() {
     $("[data-id='" + activeList + "']").addClass('active');
 }
 
-function renderList() {
+function renderList(background) {
+    if (background) {
+    	load();
+    }
+    console.log('list render function called');
     $('#wordList').empty();
     // $('#activeWord').text(db[activeList].list[0].word);
     $('#define').text(db[activeList].list[0].definition);
@@ -66,23 +73,18 @@ function renderList() {
             $('#wordList').append('<h1>' + listObj.word + '</h1>').css('color', 'gray');
         }
     });
+    textValue = "";
 }
 
 function next() {
     db[activeList].list.push(db[activeList].list.shift());
     renderList();
-    textValue = "";
 }
-
-
 
 $(document).ready(function() {
 
-
-
     renderTabs();
     renderList();
-
 
     $('#newList').click(function() {
         var name = prompt('New list name.');
@@ -99,7 +101,7 @@ $(document).ready(function() {
     $('body').on('click', ".tab", function(ev) {
         var clicked = $(ev.currentTarget);
         activeList = clicked.attr("data-id");
-        textValue = "";
+
         renderTabs();
         renderList();
     });
@@ -130,11 +132,12 @@ $(document).ready(function() {
     });
 
     $('#delete').click(function() {
-    	db[activeList].list.shift();
-    	chrome.storage.sync.set({
+        db[activeList].list.shift();
+        chrome.storage.sync.set({
             "chromeDB": db
         });
         renderList();
+
     });
 
 });
@@ -174,7 +177,7 @@ function noReset() {
         if (textValue.toLowerCase() === db[activeList].list[0].word.toLowerCase()) {
             next();
         }
-        console.log(textValue, db[activeList].list[0].word.substring(0, textValue.length + 1).toLowerCase());
+        // console.log(textValue, db[activeList].list[0].word.substring(0, textValue.length + 1).toLowerCase());
     });
 }
 

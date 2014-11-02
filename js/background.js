@@ -25,15 +25,18 @@ var db = [{
     list: []
 }];
 
-chrome.storage.sync.get("chromeDB", function(localStorage) {
-    if (localStorage.chromeDB === undefined) {
-        chrome.storage.sync.set({
-            "chromeDB": db
-        });
-    } else {
-        db = localStorage.chromeDB;
-    }
-});
+function loadLocalStorage() {
+    chrome.storage.sync.get("chromeDB", function(localStorage) {
+        if (localStorage.chromeDB === undefined) {
+            chrome.storage.sync.set({
+                "chromeDB": db
+            });
+        } else {
+            db = localStorage.chromeDB;
+        }
+    });
+}
+loadLocalStorage();
 
 function openTab(filename) {
     var myid = chrome.i18n.getMessage("@@extension_id");
@@ -79,13 +82,21 @@ db.forEach(function(listItem, index) {
         contexts: ["selection"],
         onclick: function(info) {
             var word = info.selectionText;
-            db[index].list.unshift({
-                word: word
+            chrome.storage.sync.get("chromeDB", function(localStorage) {
+                db = localStorage.chromeDB;
+                db[index].list.unshift({
+                    word: word
+                });
+                chrome.storage.sync.set({
+                    "chromeDB": db
+                });
+                var tabs = chrome.extension.getViews({
+                    type: "tab"
+                });
+                if (tabs[0] !== undefined) {
+                    tabs[0].renderList(true);
+                }
             });
-            chrome.storage.sync.set({
-                "chromeDB": db
-            });
-            console.log(word, db);
         }
     });
 });
